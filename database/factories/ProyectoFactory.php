@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -14,19 +15,44 @@ class ProyectoFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition()
-{
-    return [
-        'codigo' => 'PRO-' . strtoupper($this->faker->unique()->bothify('??##')),
-        'nombre' => $this->faker->sentence(3),
-        'descripcion' => $this->faker->paragraph,
-        'sector' => $this->faker->randomElement(['Salud', 'Educación', 'Infraestructura', 'Ambiente']),
-        'fecha_inicio' => $this->faker->dateTimeBetween('-1 year', 'now'),
-        'fecha_fin' => $this->faker->dateTimeBetween('now', '+1 year'),
-        'presupuesto' => $this->faker->numberBetween(10000, 1000000),
-        'estado' => $this->faker->randomElement(['borrador', 'aprobado', 'ejecucion', 'completado']),
-        'user_id' => User::factory()
-    ];
+    public function definition(): array
+    {
+        $fechaInicio = $this->faker->dateTimeBetween('-1 year', '+6 months');
+        $fechaFin = $this->faker->dateTimeBetween($fechaInicio, '+2 years');
+        
+        return [
+            'codigo' => 'PROY-' . $this->faker->unique()->numberBetween(10000, 99999),
+            'nombre' => $this->faker->randomElement([
+                'Construcción de Centro de Salud',
+                'Mejoramiento de Infraestructura Vial',
+                'Implementación de Sistema de Agua Potable',
+                'Modernización Tecnológica',
+                'Programa de Capacitación Docente',
+                'Fortalecimiento Institucional',
+                'Desarrollo de Energías Renovables',
+                'Centro de Atención Ciudadana',
+                'Parque Industrial',
+                'Sistema de Transporte Público'
+            ]) . ' - ' . $this->faker->city(),
+            'descripcion' => $this->faker->paragraph(3),
+            'sector' => $this->faker->randomElement([
+                'Salud',
+                'Educación',
+                'Transporte',
+                'Infraestructura',
+                'Tecnología',
+                'Energía',
+                'Agua y Saneamiento',
+                'Desarrollo Social',
+                'Medio Ambiente',
+                'Seguridad'
+            ]),
+            'fecha_inicio' => $fechaInicio,
+            'fecha_fin' => $fechaFin,
+            'presupuesto' => $this->faker->randomFloat(2, 50000, 10000000),
+            'estado' => $this->faker->randomElement(['En Planificación', 'En Ejecución', 'Suspendido', 'Finalizado', 'Cancelado']),
+            'user_id' => User::factory(),
+        ];
 }
 
 }

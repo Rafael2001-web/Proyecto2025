@@ -11,13 +11,10 @@ class ProyectoSeeder extends Seeder
 {
     public function run()
     {
-        // Crear 3 usuarios de prueba
-        $users = User::factory(3)->create();
-
         // Crear 20 proyectos asignados aleatoriamente a los usuarios
         Proyecto::factory(20)->create([
-            'user_id' => function() use ($users) {
-                return $users->random()->id;
+            'user_id' => function() {
+                return User::inRandomOrder()->first()->id;
             }
         ]);
 
