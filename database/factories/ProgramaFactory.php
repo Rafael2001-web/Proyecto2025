@@ -22,7 +22,7 @@ class ProgramaFactory extends Factory
         
         return [
             //relacion con entidad
-            'idEntidad' => Entidad::inRandomOrder()->first()->idEntidad,
+            'idEntidad' => Entidad::inRandomOrder()->first()?->idEntidad ?? Entidad::factory(),
             'nombre' => $this->faker->randomElement([
                 'Programa Nacional de Educación',
                 'Programa de Desarrollo Rural',

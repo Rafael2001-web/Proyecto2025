@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\proyecto;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class ProyectoController extends Controller
 {
@@ -12,8 +13,9 @@ class ProyectoController extends Controller
      */
     public function index()
     {
-        $proyectos = Proyecto::latest()->paginate(10);
-        return view('proyectos.index', compact('proyectos')); 
+        Gate::any(['view proyectos', 'manage proyectos']);
+        $proyectos = Proyecto::all();
+        return view('proyectos.index', compact('proyectos'));
     }
 
     /**
@@ -21,7 +23,8 @@ class ProyectoController extends Controller
      */
     public function create()
     {
-        return view('proyectos.create');
+        Gate::any(['create proyectos', 'manage proyectos']);
+        return redirect()->route('proyectos.index');
     }
 
     /**
@@ -29,6 +32,7 @@ class ProyectoController extends Controller
      */
     public function store(Request $request)
     {
+        Gate::any(['create proyectos', 'manage proyectos']);
         $request->validate([
             'nombre' => 'required|max:255',
             'descripcion' => 'required',
@@ -57,6 +61,7 @@ class ProyectoController extends Controller
      */
    public function show(Proyecto $proyecto)
     {
+        Gate::any(['view proyectos', 'manage proyectos']);
         return view('proyectos.show', compact('proyecto'));
     }
 
@@ -65,7 +70,8 @@ class ProyectoController extends Controller
      */
      public function edit(Proyecto $proyecto)
     {
-        return view('proyectos.edit', compact('proyecto'));
+        Gate::any(['edit proyectos', 'manage proyectos']);
+        return redirect()->route('proyectos.index');
     }
 
     /**
@@ -73,6 +79,7 @@ class ProyectoController extends Controller
      */
     public function update(Request $request, Proyecto $proyecto)
     {
+        Gate::any(['edit proyectos', 'manage proyectos']);
         $request->validate([
             'nombre' => 'required|max:255',
             'descripcion' => 'required',
@@ -94,6 +101,7 @@ class ProyectoController extends Controller
      */
      public function destroy(Proyecto $proyecto)
     {
+        Gate::any(['delete proyectos', 'manage proyectos']);
         $proyecto->delete();
         return redirect()->route('proyectos.index')
             ->with('success', 'Proyecto eliminado correctamente');

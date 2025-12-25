@@ -15,19 +15,25 @@ class DatabaseSeeder extends Seeder
         $this->call([
             // Primero los usuarios (necesarios para proyectos)
             AdminUserSeeder::class,
-            
+
+            // Roles y permisos (después de usuarios)
+            RoleSeeder::class,
+
             // Entidades base del sistema
-            //EntidadSeeder::class,
-            //UnidadSeeder::class,
-            
+            EntidadSeeder::class,
+            UnidadSeeder::class,
+
             // Objetivos y marcos estratégicos
-            //OdsSeeder::class,
-            //PndSeeder::class,
-            //ObjEstrategicoSeeder::class,
-            
+            OdsSeeder::class,
+            PndSeeder::class,
+            ObjEstrategicoSeeder::class,
+
+            // Alineaciones estratégicas (después de tener ODS, PND y Obj. Estratégicos)
+            ObjetivoInstitucionalSeeder::class,
+
             // Planificación e inversión
-            //PlanSeeder::class,
-            //ProgramaSeeder::class,
+            PlanSeeder::class,
+            ProgramaSeeder::class,
             ProyectoSeeder::class,
         ]);
     }

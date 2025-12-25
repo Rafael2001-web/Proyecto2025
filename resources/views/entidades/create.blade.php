@@ -1,10 +1,10 @@
-@extends('layouts.app')
-
+<x-app-layout>
 @section('title','Nueva Entidad')
-
-@section('content')
-    <h2 class="text-2xl font-bold mb-4">Crear Entidades:</h2>
-    
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-white leading-tight">
+            {{ __('Crear Entidades') }}
+        </h2>
+    </x-slot>
     @if ($errors->any())
         <div>
 
@@ -61,8 +61,4 @@
             <a href="{{route('entidades.index')}}">Volver</a>
             
         </form>
-
-
-
-
-@endsection
+</x-app-layout>

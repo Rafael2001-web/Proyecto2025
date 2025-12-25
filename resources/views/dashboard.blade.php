@@ -10,17 +10,21 @@
 
     <div class="container mx-auto px-4 py-8">
         @auth
-            @if(auth()->user()->isAdmin())
-                <!-- Bienvenida -->
-                <div class="bg-white rounded-lg shadow-md p-6 mb-8 border-l-4 border-secondary">
-                    <h2 class="text-xl font-semibold text-primary mb-2">
-                        Bienvenido, {{ auth()->user()->name }}
-                    </h2>
-                    <p class="text-neutral">
+            <!-- Bienvenida -->
+            <div class="bg-white rounded-lg shadow-md p-6 mb-8 border-l-4 border-secondary">
+                <h2 class="text-xl font-semibold text-primary mb-2">
+                    Bienvenido, {{ auth()->user()->name }}
+                </h2>
+                <p class="text-neutral">
+                    @if(auth()->user()->isAdmin())
                         Tienes acceso completo al sistema como administrador. Gestiona todos los módulos desde aquí.
-                    </p>
-                </div>
+                    @else
+                        Accede a los módulos disponibles según tus permisos asignados.
+                    @endif
+                </p>
+            </div>
 
+            @if(auth()->user()->isAdmin())
                 <!-- Estadísticas Rápidas -->
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                     <div class="bg-white rounded-lg shadow-md p-6 border-t-4 border-secondary">
@@ -79,10 +83,12 @@
                         </div>
                     </div>
                 </div>
+            @endif
 
-                <!-- Módulos Principales -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                    <!-- Configuración Institucional -->
+            <!-- Módulos Principales -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                <!-- Configuración Institucional -->
+                @canany(['view entidades', 'manage entidades', 'view unidades', 'manage unidades'])
                     <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
                         <div class="bg-gradient-to-r from-secondary to-accent p-4">
                             <h3 class="text-white font-semibold text-lg">Configuración Institucional</h3>
@@ -90,17 +96,23 @@
                         <div class="p-6">
                             <p class="text-neutral mb-4">Gestiona la estructura institucional del Estado</p>
                             <div class="space-y-2">
-                                <a href="{{ route('entidades.index') }}" class="block w-full bg-light hover:bg-secondary hover:text-white text-primary font-medium py-2 px-4 rounded transition-colors duration-200">
-                                    Entidades
-                                </a>
-                                <a href="{{ route('unidades.index') }}" class="block w-full bg-light hover:bg-secondary hover:text-white text-primary font-medium py-2 px-4 rounded transition-colors duration-200">
-                                    Unidades
-                                </a>
+                                @canany(['view entidades', 'manage entidades'])
+                                    <a href="{{ route('entidades.index') }}" class="block w-full bg-light hover:bg-secondary hover:text-white text-primary font-medium py-2 px-4 rounded transition-colors duration-200">
+                                        Entidades
+                                    </a>
+                                @endcanany
+                                @canany(['view unidades', 'manage unidades'])
+                                    <a href="{{ route('unidades.index') }}" class="block w-full bg-light hover:bg-secondary hover:text-white text-primary font-medium py-2 px-4 rounded transition-colors duration-200">
+                                        Unidades
+                                    </a>
+                                @endcanany
                             </div>
                         </div>
                     </div>
+                @endcanany
 
-                    <!-- Planificación -->
+                <!-- Planificación -->
+                @canany(['view planes', 'manage planes', 'view pnd', 'manage pnd', 'view objetivos_estrategicos', 'manage objetivos_estrategicos', 'view ods', 'manage ods', 'view strategic alignment', 'manage strategic alignment'])
                     <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
                         <div class="bg-gradient-to-r from-accent to-color2 p-4">
                             <h3 class="text-primary font-semibold text-lg">Planificación</h3>
@@ -108,23 +120,38 @@
                         <div class="p-6">
                             <p class="text-neutral mb-4">Administra planes y objetivos estratégicos</p>
                             <div class="space-y-2">
-                                <a href="{{ route('planes.index') }}" class="block w-full bg-light hover:bg-accent hover:text-primary text-primary font-medium py-2 px-4 rounded transition-colors duration-200">
-                                    Planes
-                                </a>
-                                <a href="{{ route('pnd.index') }}" class="block w-full bg-light hover:bg-accent hover:text-primary text-primary font-medium py-2 px-4 rounded transition-colors duration-200">
-                                    Objetivos PND
-                                </a>
-                                <a href="{{ route('objEstrategicos.index') }}" class="block w-full bg-light hover:bg-accent hover:text-primary text-primary font-medium py-2 px-4 rounded transition-colors duration-200">
-                                    Obj. Estratégicos
-                                </a>
-                                <a href="{{ route('ods.index') }}" class="block w-full bg-light hover:bg-accent hover:text-primary text-primary font-medium py-2 px-4 rounded transition-colors duration-200">
-                                    ODS
-                                </a>
+                                @canany(['view planes', 'manage planes'])
+                                    <a href="{{ route('planes.index') }}" class="block w-full bg-light hover:bg-accent hover:text-primary text-primary font-medium py-2 px-4 rounded transition-colors duration-200">
+                                        Planes
+                                    </a>
+                                @endcanany
+                                @canany(['view pnd', 'manage pnd'])
+                                    <a href="{{ route('pnd.index') }}" class="block w-full bg-light hover:bg-accent hover:text-primary text-primary font-medium py-2 px-4 rounded transition-colors duration-200">
+                                        Objetivos PND
+                                    </a>
+                                @endcanany
+                                @canany(['view objetivos_estrategicos', 'manage objetivos_estrategicos'])
+                                    <a href="{{ route('objEstrategicos.index') }}" class="block w-full bg-light hover:bg-accent hover:text-primary text-primary font-medium py-2 px-4 rounded transition-colors duration-200">
+                                        Obj. Estratégicos
+                                    </a>
+                                @endcanany
+                                @canany(['view strategic alignment', 'manage strategic alignment'])
+                                    <a href="{{ route('objetivos-institucionales.index') }}" class="block w-full bg-light hover:bg-accent hover:text-primary text-primary font-medium py-2 px-4 rounded transition-colors duration-200">
+                                        Obj. Institucionales
+                                    </a>
+                                @endcanany
+                                @canany(['view ods', 'manage ods'])
+                                    <a href="{{ route('ods.index') }}" class="block w-full bg-light hover:bg-accent hover:text-primary text-primary font-medium py-2 px-4 rounded transition-colors duration-200">
+                                        ODS
+                                    </a>
+                                @endcanany
                             </div>
                         </div>
                     </div>
+                @endcanany
 
-                    <!-- Gestión de Inversión -->
+                <!-- Gestión de Inversión -->
+                @canany(['view proyectos', 'manage proyectos', 'view programas', 'manage programas'])
                     <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
                         <div class="bg-gradient-to-r from-color1 to-secondary p-4">
                             <h3 class="text-white font-semibold text-lg">Gestión de Inversión</h3>
@@ -132,39 +159,85 @@
                         <div class="p-6">
                             <p class="text-neutral mb-4">Administra proyectos y programas de inversión</p>
                             <div class="space-y-2">
-                                <a href="{{ route('proyectos.index') }}" class="block w-full bg-light hover:bg-color1 hover:text-white text-primary font-medium py-2 px-4 rounded transition-colors duration-200">
-                                    Proyectos
-                                </a>
-                                <a href="{{ route('programas.index') }}" class="block w-full bg-light hover:bg-color1 hover:text-white text-primary font-medium py-2 px-4 rounded transition-colors duration-200">
-                                    Programas
-                                </a>
+                                @canany(['view proyectos', 'manage proyectos'])
+                                    <a href="{{ route('proyectos.index') }}" class="block w-full bg-light hover:bg-color1 hover:text-white text-primary font-medium py-2 px-4 rounded transition-colors duration-200">
+                                        Proyectos
+                                    </a>
+                                @endcanany
+                                @canany(['view programas', 'manage programas'])
+                                    <a href="{{ route('programas.index') }}" class="block w-full bg-light hover:bg-color1 hover:text-white text-primary font-medium py-2 px-4 rounded transition-colors duration-200">
+                                        Programas
+                                    </a>
+                                @endcanany
                             </div>
                         </div>
                     </div>
-                </div>
-            @else
-                <!-- Usuario sin permisos de admin -->
-                <div class="bg-white rounded-lg shadow-md p-8 text-center">
-                    <div class="mb-4">
-                        <svg class="w-16 h-16 text-neutral mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-                        </svg>
+                @endcanany
+
+                <!-- Administración de Usuarios -->
+                @canany(['view usuarios', 'manage usuarios', 'view roles', 'manage roles', 'view permissions', 'manage permissions'])
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                        <div class="bg-gradient-to-r from-neutral to-primary p-4">
+                            <h3 class="text-white font-semibold text-lg">Administración</h3>
+                        </div>
+                        <div class="p-6">
+                            <p class="text-neutral mb-4">Gestiona usuarios, roles y permisos</p>
+                            <div class="space-y-2">
+                                @canany(['view usuarios', 'manage usuarios'])
+                                    <a href="{{ route('usuarios.index') }}" class="block w-full bg-light hover:bg-neutral hover:text-white text-primary font-medium py-2 px-4 rounded transition-colors duration-200">
+                                        Usuarios
+                                    </a>
+                                @endcanany
+                                @canany(['view roles', 'manage roles'])
+                                    <a href="{{ route('roles.index') }}" class="block w-full bg-light hover:bg-neutral hover:text-white text-primary font-medium py-2 px-4 rounded transition-colors duration-200">
+                                        Roles
+                                    </a>
+                                @endcanany
+                                @canany(['view permissions', 'manage permissions'])
+                                    <a href="{{ route('permissions.index') }}" class="block w-full bg-light hover:bg-neutral hover:text-white text-primary font-medium py-2 px-4 rounded transition-colors duration-200">
+                                        Permisos
+                                    </a>
+                                @endcanany
+                            </div>
+                        </div>
                     </div>
-                    <h2 class="text-xl font-semibold text-primary mb-2">Acceso Restringido</h2>
-                    <p class="text-neutral">
-                        Bienvenido <span class="font-medium text-primary">{{ auth()->user()->name }}</span>. 
-                        No tienes permisos de administrador para acceder a todas las funcionalidades del sistema.
-                    </p>
-                    <div class="mt-6">
+                @endcanany
+            </div>
+
+            <!-- Información de Perfil -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-semibold text-primary mb-4">Tu Información</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <p class="text-sm text-neutral">Nombre</p>
+                        <p class="font-medium text-primary">{{ auth()->user()->name }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-neutral">Email</p>
+                        <p class="font-medium text-primary">{{ auth()->user()->email }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-neutral">Roles</p>
+                        <p class="font-medium text-primary">
+                            @forelse(auth()->user()->roles as $role)
+                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-secondary text-white mr-1">
+                                    {{ $role->name }}
+                                </span>
+                            @empty
+                                <span class="text-neutral">Sin roles asignados</span>
+                            @endforelse
+                        </p>
+                    </div>
+                    <div class="flex items-end">
                         <a href="{{ route('profile.edit') }}" class="inline-flex items-center px-4 py-2 bg-secondary text-white rounded-lg hover:bg-opacity-90 transition-colors duration-200">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                             </svg>
-                            Ver Perfil
+                            Editar Perfil
                         </a>
                     </div>
                 </div>
-            @endif
+            </div>
         @else
             <!-- Usuario no autenticado -->
             <div class="bg-white rounded-lg shadow-md p-8 text-center">

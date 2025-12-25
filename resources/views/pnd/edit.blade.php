@@ -1,51 +1,59 @@
-@extends('layouts.app')
+<x-modal name="edit-pnd-modal" maxWidth="2xl">
+    <div class="p-6">
+        <div class="flex items-center justify-between mb-6">
+            <h3 class="text-lg font-semibold text-primary">
+                Editar Objetivo PND
+            </h3>
+            <button x-on:click="$dispatch('close-modal', 'edit-pnd-modal')"
+                class="text-neutral hover:text-primary transition-colors duration-150">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
 
-@section('title','Editar Planes')
-
-@section('content')
-    <h2 class="text-2xl font-bold mb-4">Editar las Planes</h2>
-
-    {{-- Formulario para la edicion de Planes--}}
-
-        <form action="{{ route ('pnd.update' , $pnd->idPnd )}}" method="POST" class="space-y-4">
+        <form id="edit-pnd-form" method="POST" class="space-y-4">
             @csrf
             @method('PUT')
 
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <x-input-label for="edit_eje" value="Eje" />
+                    <select id="edit_eje" name="eje"
+                        class="mt-1 block w-full border-neutral/30 bg-white text-neutral focus:border-secondary focus:ring-secondary/20 focus:ring-2 rounded-md shadow-sm"
+                        required>
+                        <option value="">Seleccione un eje</option>
+                        <option value="EJE Social">EJE Social</option>
+                        <option value="EJE Desarrollo económico">EJE Desarrollo económico</option>
+                        <option value="EJE Infraestructura">EJE Infraestructura</option>
+                        <option value="EJE Institucional">EJE Institucional</option>
+                    </select>
+                    <x-input-error class="mt-2" :messages="$errors->get('eje')" />
+                </div>
 
-            {{--
-            <div>
-                <label class="block">ID</label>
-                <input type="number" name="idPnd" require value="{{ old('idPnd', $pnd->idPnd) }}">
-            </div>--}}
-
-
-            <div class="form-group">
-            <label>Eje</label>
-            <select name="eje" class="form-control" required>
-                <option value="">Seleccione un eje</option>
-                <option value="EJE Social" {{ (old('eje', $pnd->eje ?? '') == 'EJE Social') ? 'selected' : '' }}>EJE Social</option>
-                <option value="EJE Desarrollo económico" {{ (old('eje', $pnd->eje ?? '') == 'EJE Desarrollo económico') ? 'selected' : '' }}>EJE Desarrollo económico</option>
-                <option value="EJE Infraestructura" {{ (old('eje', $pnd->eje ?? '') == 'EJE Infraestructura') ? 'selected' : '' }}>EJE Infraestructura</option>
-                <option value="EJE Institucional" {{ (old('eje', $pnd->eje ?? '') == 'EJE Institucional') ? 'selected' : '' }}>EJE Institucional</option>
-            </select>
+                <div>
+                    <x-input-label for="edit_objetivoN" value="# Objetivo Nacional" />
+                    <x-text-input id="edit_objetivoN" name="objetivoN" type="number" class="mt-1 block w-full" required />
+                    <x-input-error class="mt-2" :messages="$errors->get('objetivoN')" />
+                </div>
             </div>
 
             <div>
-                <label class="block"># Objetivo Nacional</label>
-                <input type="number" name="objetivoN" require value="{{ old('objetivoN', $pnd->objetivoN) }}">
+                <x-input-label for="edit_descripcion" value="Descripción" />
+                <textarea id="edit_descripcion" name="descripcion" rows="3"
+                    class="mt-1 block w-full border-neutral/30 bg-white text-neutral focus:border-secondary focus:ring-secondary/20 focus:ring-2 rounded-md shadow-sm"
+                    required></textarea>
+                <x-input-error class="mt-2" :messages="$errors->get('descripcion')" />
             </div>
 
-            <div>
-                <label class="block">Descripción</label>
-                <input type="text" name="descripcion" require value="{{ old('descripcion', $pnd->descripcion) }}">
+            <div class="flex justify-end space-x-3 pt-4">
+                <x-secondary-button type="button" x-on:click="$dispatch('close-modal', 'edit-pnd-modal')">
+                    Cancelar
+                </x-secondary-button>
+                <x-primary-button type="submit">
+                    Actualizar Objetivo PND
+                </x-primary-button>
             </div>
-
-            <button type="submit">Actualizar</button>
-
-            <a href="{{route('pnd.index')}}">Volver</a>
-            
         </form>
-
-
-
-@endsection
+    </div>
+</x-modal>

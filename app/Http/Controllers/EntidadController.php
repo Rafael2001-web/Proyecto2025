@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\Unique;
 use Ramsey\Uuid\Type\Integer;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Gate;
 
 class EntidadController extends Controller
 {
@@ -15,6 +16,7 @@ class EntidadController extends Controller
      */
     public function index()
     {
+        Gate::any(['view entidades', 'manage entidades']);
         $entidades = Entidad::all();
         return view('entidades.index', compact('entidades'));
 
@@ -25,12 +27,14 @@ class EntidadController extends Controller
      */
     public function create()
     {
+        Gate::any(['create entidades', 'manage entidades']);
         return view('entidades.create');
     }
 
-    public function show(Request $request)
+    public function show($id)
     {
-        $entidad = Entidad::all();
+        Gate::any(['view entidades', 'manage entidades']);
+        $entidad = Entidad::findOrFail($id);
         return view('entidades.show', compact('entidad'));
     }
 
@@ -40,6 +44,7 @@ class EntidadController extends Controller
      */
     public function store(Request $request)
     {
+        Gate::any(['create entidades', 'manage entidades']);
         $request->validate([
             'codigo'=> 'required|integer|unique:entidad,codigo',
             'subSector'=> 'required|string',
@@ -56,14 +61,14 @@ class EntidadController extends Controller
 
     }
 
-   
+
     /**
      * Show the form for editing the specified resource.
      */
     public function edit($id)
-    {
+    {Gate::any(['edit entidades', 'manage entidades']);
         $entidad = Entidad::findOrfail($id);
-        return view('entidades.edit', compact('entidad')); 
+        return view('entidades.edit', compact('entidad'));
     }
 
     /**
@@ -71,7 +76,7 @@ class EntidadController extends Controller
      */
     public function update(Request $request, $id)
     {
-        
+        Gate::any(['edit entidades', 'manage entidades']);
         $request->validate([
             'codigo'=> 'required|integer|unique:entidad,codigo,'.$id.',idEntidad', // error
             'subSector'=> 'required|string',
@@ -85,8 +90,6 @@ class EntidadController extends Controller
         $entidad->update($request->all()); // error
 
         return redirect()->route('entidades.index')->with('success', 'Entidad Actualizada Satisfactoriamente');
-
-
     }
 
     /**
@@ -94,18 +97,22 @@ class EntidadController extends Controller
      */
     public function destroy($id)
     {
+        Gate::any(['delete entidades', 'manage entidades']);
         $entidad = Entidad::findOrfail($id);
         $entidad->delete();
 
          return redirect()->route('entidades.index')->with('success', 'Entidad Eliminada Satisfactoriamente');
-
     }
 
-    public function GenerarPDF(){
-        $entidad = Entidad::all();
-        $pdf =Pdf::loadView('entidades.pdf', compact('entidad'));
-        return $pdf->stream('reporte_entidad.pdf');
+    /**
+     * Generate PDF report of all entities.
+     */
+    public function documentopdf()
+    {
+        Gate::any(['generate report entidades', 'generate reports']);
+        $entidades = Entidad::all();
+        $pdf = Pdf::loadView('entidades.pdf', compact('entidades'));
+        return $pdf->stream('reporte_entidades.pdf');
     }
-
 
 }

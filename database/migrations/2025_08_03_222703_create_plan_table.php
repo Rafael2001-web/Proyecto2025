@@ -15,12 +15,17 @@ return new class extends Migration
             $table->id('idPlan');
             $table->string('codigo')->unique();
             $table->string('nombre');
-            $table->text('entidad');
+            $table->unsignedBigInteger('idEntidad');
             $table->decimal('presupuesto', 12, 2);
             $table->date('fecha_inicio');
             $table->date('fecha_fin');
             $table->string('estado')->default('estado');
             $table->timestamps();
+
+            // Foreign key constraint
+            $table->foreign('idEntidad')->references('idEntidad')->on('entidad')->onDelete('restrict');
+            // Índice para mejorar performance
+            $table->index('idEntidad');
         });
     }
 

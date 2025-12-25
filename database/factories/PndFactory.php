@@ -18,13 +18,11 @@ class PndFactory extends Factory
     {
         return [
             'eje' => $this->faker->randomElement([
-                'Eje 1: Desarrollo Sostenible',
-                'Eje 2: Inclusión Social',
-                'Eje 3: Innovación y Tecnología',
-                'Eje 4: Infraestructura y Transporte',
-                'Eje 5: Salud y Bienestar',
-                'Eje 6: Educación y Cultura',
-                'Eje 7: Gobernanza y Participación Ciudadana'
+                'Eje 1: Social',
+                'Eje 2: Desarrollo Económico',
+                'Eje 3: Infraestructura, Energía y Medio Ambiente',
+                'Eje 4: Institucional',
+                'Eje 5: Gestión de Riesgos',
             ]),
             'objetivoN' => $this->faker->numberBetween(1, 10),
             'descripcion' => $this->faker->paragraph(3),

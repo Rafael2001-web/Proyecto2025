@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\objEstrategico;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Gate;
 
 class ObjEstrategicoController extends Controller
 {
@@ -13,9 +14,9 @@ class ObjEstrategicoController extends Controller
      */
     public function index()
     {
+        Gate::any(['view objetivos_estrategicos', 'manage objetivos_estrategicos']);
         $objEstrategicos = objEstrategico::all();
         return view('objEstrategicos.index', compact('objEstrategicos'));
-
     }
 
     /**
@@ -23,14 +24,15 @@ class ObjEstrategicoController extends Controller
      */
     public function create()
     {
-        $objEstrategicos = objEstrategico::all();
-        return view('objEstrategicos.create', compact('objEstrategicos'));
+        Gate::any(['create objetivos_estrategicos', 'manage objetivos_estrategicos']);
+        return redirect()->route('objEstrategicos.index');
     }
 
-    public function show(Request $request)
+    public function show($id)
     {
-         $objEstrategicos = objEstrategico::all();
-        return view('objEstrategicos.show', compact('objEstrategicos'));
+        Gate::any(['view objetivos_estrategicos', 'manage objetivos_estrategicos']);
+        $objEstrategico = objEstrategico::findOrFail($id);
+        return view('objEstrategicos.show', compact('objEstrategico'));
     }
 
     /**
@@ -38,6 +40,7 @@ class ObjEstrategicoController extends Controller
      */
     public function store(Request $request)
     {
+        Gate::any(['create objetivos_estrategicos', 'manage objetivos_estrategicos']);
         $request->validate([
             'fechaRegistro'=> 'required|date',
             'descripcion'=> 'required|string',
@@ -47,18 +50,15 @@ class ObjEstrategicoController extends Controller
         objEstrategico::create($request->all());
 
         return redirect()->route('objEstrategicos.index')->with('success', 'Objetivo Estrategico Registrado Satisfactoriamente');
-
-
     }
 
-   
     /**
      * Show the form for editing the specified resource.
      */
     public function edit($id)
     {
-        $objEstrategicos = objEstrategico::findOrfail($id);
-        return view('objEstrategicos.edit', compact('objEstrategicos')); 
+        Gate::any(['edit objetivos_estrategicos', 'manage objetivos_estrategicos']);
+        return redirect()->route('objEstrategicos.index');
     }
 
     /**
@@ -66,7 +66,7 @@ class ObjEstrategicoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        
+        Gate::any(['edit objetivos_estrategicos', 'manage objetivos_estrategicos']);
         $request->validate([
             //'idobjEstrategico'=> 'integer|unique:idobjEstrategico',
             'fechaRegistro'=> 'required|date',
@@ -78,8 +78,6 @@ class ObjEstrategicoController extends Controller
         $objEstrategicos->update($request->all()); // error
 
         return redirect()->route('objEstrategicos.index')->with('success', 'Objetivo Estratégico Actualizado Satisfactoriamente');
-
-
     }
 
     /**
@@ -87,14 +85,15 @@ class ObjEstrategicoController extends Controller
      */
     public function destroy($id)
     {
+        Gate::any(['delete objetivos_estrategicos', 'manage objetivos_estrategicos']);
         $objEstrategicos = objEstrategico::findOrfail($id);
         $objEstrategicos->delete();
 
          return redirect()->route('objEstrategicos.index')->with('success', 'Objetivo Estratégico Eliminada Satisfactoriamente');
-
     }
 
-    public function GenerarPDF(){
+    public function documentopdf(){
+        Gate::any(['generate report objetivos_estrategicos', 'generate reports']);
         $objEstrategicos = objEstrategico::all();
         $pdf =Pdf::loadView('objEstrategicos.pdf', compact('objEstrategicos'));
         return $pdf->stream('reporte_objEstrategicos.pdf');

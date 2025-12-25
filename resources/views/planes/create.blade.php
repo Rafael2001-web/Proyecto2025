@@ -1,8 +1,7 @@
-@extends('layouts.app')
 
+<x-app-layout>
 @section('title','Nuevo Plan')
 
-@section('content')
     <h2 class="text-2xl font-bold mb-4">Crear Planes:</h2>
     
     @if ($errors->any())
@@ -70,7 +69,4 @@
             
         </form>
 
-
-
-
-@endsection
+</x-app-layout>

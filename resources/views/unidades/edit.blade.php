@@ -1,43 +1,55 @@
-@extends('layouts.app')
+<x-modal name="edit-unidad-modal" maxWidth="2xl">
+    <div class="p-6">
+        <div class="flex items-center justify-between mb-6">
+            <h3 class="text-lg font-semibold text-primary">
+                Editar Unidad
+            </h3>
+            <button x-on:click="$dispatch('close-modal', 'edit-unidad-modal')"
+                class="text-neutral hover:text-primary transition-colors duration-150">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
 
-@section('title','Editar')
-
-@section('content')
-    <h2 class="text-2xl font-bold mb-4">Editar las Unidades</h2>
-
-    {{-- Formulario para la edicion de unidades --}}
-
-        <form action="{{ route ('unidades.update' , $unidades->idUnidad )}}" method="POST" class="space-y-4">
+        <form id="edit-unidad-form" method="POST" class="space-y-4">
             @csrf
             @method('PUT')
 
-            {{-- 
-            <div>
-                <label class="block">ID</label>
-                <input type="number" name="idUnidad" require value="{{ old('idUnidad', $unidades->idUnidad) }}">
-            </div>--}}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <x-input-label for="edit_macrosector" value="Macrosector" />
+                    <x-text-input id="edit_macrosector" name="macrosector" type="text" class="mt-1 block w-full" required />
+                    <x-input-error class="mt-2" :messages="$errors->get('macrosector')" />
+                </div>
 
-             <div>
-                <label class="block">Macrosector</label>
-                <input type="text" name="macrosector" require value="{{ old('macrosector', $unidades->macrosector) }}" >
+                <div>
+                    <x-input-label for="edit_sector" value="Sector" />
+                    <x-text-input id="edit_sector" name="sector" type="text" class="mt-1 block w-full" required />
+                    <x-input-error class="mt-2" :messages="$errors->get('sector')" />
+                </div>
+
+                <div>
+                    <x-input-label for="edit_estado" value="Estado" />
+                    <select id="edit_estado" name="estado"
+                        class="mt-1 block w-full border-neutral/30 bg-white text-neutral focus:border-secondary focus:ring-secondary/20 focus:ring-2 rounded-md shadow-sm"
+                        required>
+                        <option value="">Seleccionar estado</option>
+                        <option value="Activo">Activo</option>
+                        <option value="Inactivo">Inactivo</option>
+                    </select>
+                    <x-input-error class="mt-2" :messages="$errors->get('estado')" />
+                </div>
             </div>
 
-             <div>
-                <label class="block">Sector</label>
-                <input type="text" name="sector" require value="{{ old('sector', $unidades->sector) }}" >
+            <div class="flex justify-end space-x-3 pt-4">
+                <x-secondary-button type="button" x-on:click="$dispatch('close-modal', 'edit-unidad-modal')">
+                    Cancelar
+                </x-secondary-button>
+                <x-primary-button type="submit">
+                    Actualizar Unidad
+                </x-primary-button>
             </div>
-
-            <div>
-                <label class="block">Estado</label>
-                <input type="text" name="estado" require value="{{ old('estado', $unidades->estado) }}" >
-            </div>
-
-            <button type="submit">Actualizar</button>
-
-            <a href="{{route('unidades.index')}}">Volver</a>
-            
         </form>
-
-
-
-@endsection
+    </div>
+</x-modal>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\plan;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Gate;
 
 class PlanController extends Controller
 {
@@ -13,9 +14,9 @@ class PlanController extends Controller
      */
     public function index()
     {
+        Gate::any(['view planes', 'manage planes']);
         $planes = Plan::all();
         return view('planes.index', compact('planes'));
-
     }
 
     /**
@@ -23,14 +24,16 @@ class PlanController extends Controller
      */
     public function create()
     {
-        return view('planes.create');
+        Gate::any(['create planes', 'manage planes']);
+        return redirect()->route('planes.index');
     }
 
 
-     public function show(Request $request)
+    public function show($id)
     {
-        $planes = Plan::all();
-        return view('planes.show', compact('planes'));
+        Gate::any(['view planes', 'manage planes']);
+        $plan = Plan::findOrFail($id);
+        return view('planes.show', compact('plan'));
     }
 
     /**
@@ -38,8 +41,9 @@ class PlanController extends Controller
      */
     public function store(Request $request)
     {
+        Gate::any(['create planes', 'manage planes']);
         $request->validate([
-            
+
             'nombre'=> 'required|string',
             'entidad'=> 'required|string',
             'presupuesto' => 'required|numeric|min:0',
@@ -55,14 +59,14 @@ class PlanController extends Controller
 
     }
 
-   
+
     /**
      * Show the form for editing the specified resource.
      */
     public function edit($id)
     {
-        $plan = Plan::findOrfail($id);
-        return view('planes.edit', compact('plan')); 
+        Gate::any(['edit planes', 'manage planes']);
+        return redirect()->route('planes.index');
     }
 
     /**
@@ -70,9 +74,9 @@ class PlanController extends Controller
      */
     public function update(Request $request, $id)
     {
-        
+        Gate::any(['edit planes', 'manage planes']);
         $request->validate([
-            
+
             'nombre'=> 'required|string',
             'entidad'=> 'required|string',
             'presupuesto' => 'required|numeric|min:0',
@@ -85,8 +89,19 @@ class PlanController extends Controller
         $plan->update($request->all()); // error
 
         return redirect()->route('planes.index')->with('success', 'Plan Actualizado Satisfactoriamente');
+    }
 
+    public function estado(Request $request, $id)
+    {
+        Gate::any(['cambiar estado planes', 'manage planes']);
+        $request->validate([
+            'estado'=> 'required|string',
+        ]);
 
+        $plan = Plan::findOrfail($id);
+        $plan->update($request->only('estado'));
+
+        return redirect()->route('planes.index')->with('success', 'Estado del Plan Actualizado Satisfactoriamente');
     }
 
     /**
@@ -94,6 +109,7 @@ class PlanController extends Controller
      */
     public function destroy($id)
     {
+        Gate::any(['delete planes', 'manage planes']);
         $plan = Plan::findOrfail($id);
         $plan->delete();
 
@@ -101,7 +117,8 @@ class PlanController extends Controller
 
     }
 
-    public function GenerarPDF(){
+    public function documentopdf(){
+        Gate::any(['generate report planes', 'generate reports']);
         $plan = Plan::all();
         $pdf =Pdf::loadView('Planes.pdf', compact('plan'));
         return $pdf->stream('reporte_planes.pdf');

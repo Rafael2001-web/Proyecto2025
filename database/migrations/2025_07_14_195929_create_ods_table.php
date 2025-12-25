@@ -15,9 +15,7 @@ return new class extends Migration
             $table->id('idOds');
             $table->integer('odsnum');
             $table->string('nombre');
-            $table->string('descripcion');
-            
-            
+            $table->text('descripcion');
         });
     }
 

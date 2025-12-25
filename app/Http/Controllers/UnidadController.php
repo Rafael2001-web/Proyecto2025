@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\unidad;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Gate;
 
 
 class UnidadController extends Controller
@@ -14,6 +15,7 @@ class UnidadController extends Controller
      */
     public function index()
     {
+        Gate::any(['view unidades', 'manage unidades']);
         $unidades = Unidad::all();
         return view('unidades.index', compact('unidades'));
 
@@ -24,6 +26,7 @@ class UnidadController extends Controller
      */
     public function create()
     {
+        Gate::any(['create unidades', 'manage unidades']);
         $unidades = Unidad::all();
         return view('unidades.create', compact('unidades'));
     }
@@ -33,6 +36,7 @@ class UnidadController extends Controller
      */
     public function store(Request $request)
     {
+        Gate::any(['create unidades', 'manage unidades']);
         $request->validate([
             'macrosector'=> 'required|string',
             'sector'=> 'required|string',
@@ -44,10 +48,11 @@ class UnidadController extends Controller
         return redirect()->route('unidades.index')->with('success', 'Unidad Creada Satisfactoriamente');
     }
 
-    public function show(Request $request)
+    public function show($id)
     {
-        $unidades = Unidad::all();
-        return view('unidades.show', compact('unidades'));
+        Gate::any(['view unidades', 'manage unidades']);
+        $unidad = Unidad::findOrFail($id);
+        return view('unidades.show', compact('unidad'));
     }
 
 
@@ -56,8 +61,9 @@ class UnidadController extends Controller
      */
     public function edit($id)
     {
+        Gate::any(['edit unidades', 'manage unidades']);
         $unidades = Unidad::findOrfail($id);
-        return view('unidades.edit', compact('unidades')); 
+        return view('unidades.edit', compact('unidades'));
     }
 
 
@@ -66,7 +72,7 @@ class UnidadController extends Controller
      */
     public function update(Request $request, $id)
     {
-        
+        Gate::any(['edit unidades', 'manage unidades']);
         $request->validate([
             'macrosector'=> 'required|string',
             'sector'=> 'required|string',
@@ -74,7 +80,7 @@ class UnidadController extends Controller
         ]);
 
         $unidades = Unidad::findOrfail($id);
-        $unidades->update($request->all()); // error
+        $unidades->update($request->all());
 
         return redirect()->route('unidades.index')->with('success', 'Unidad Actualizada Satisfactoriamente');
 
@@ -86,6 +92,7 @@ class UnidadController extends Controller
      */
     public function destroy($id)
     {
+        Gate::any(['delete unidades', 'manage unidades']);
         $unidades = Unidad::findOrfail($id);
         $unidades->delete();
 
@@ -93,7 +100,8 @@ class UnidadController extends Controller
 
     }
 
-    public function GenerarPDF(){
+    public function documentopdf(){
+        Gate::any(['generate report unidades', 'generate reports']);
         $unidad = Unidad::all();
         $pdf =Pdf::loadView('unidades.pdf', compact('unidad'));
         return $pdf->stream('reporte_unidad.pdf');

@@ -31,7 +31,7 @@ class EntidadFactory extends Factory
                 'Desarrollo Rural'
             ]),
             'nivelGobierno' => $this->faker->randomElement(['Nacional', 'Departamental', 'Municipal', 'Distrital']),
-            'estado' => $this->faker->randomElement(['Activo', 'Inactivo', 'En Reorganización']),
+            'estado' => $this->faker->randomElement(['Activo', 'Inactivo']),
             'fechaCreacion' => $this->faker->dateTimeBetween('-10 years', 'now'),
             'fechaActualizacion' => $this->faker->dateTimeBetween('-1 years', 'now'),
         ];
