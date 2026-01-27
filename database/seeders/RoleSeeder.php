@@ -100,6 +100,7 @@ class RoleSeeder extends Seeder
             'edit strategic alignment',
             'delete strategic alignment',
             'generate report strategic alignment',
+
             'generate report objetivos_institucionales',
 
             // ===== PLANES (Gestor de Planes) =====
@@ -230,6 +231,9 @@ class RoleSeeder extends Seeder
             'view proyectos',
             // Acceso completo a reportes
             'generate reports',
+            'generate report objetivos_institucionales',
+            
+
         ]);
 
         // 🕵️ AUDITOR
@@ -321,6 +325,6 @@ class RoleSeeder extends Seeder
         $this->command->info('✅ Roles y permisos del Sistema SIPEIP 2.0 creados exitosamente');
         $this->command->info('📋 12 roles específicos con permisos granulares');
         $this->command->info('👥 12 usuarios de ejemplo creados (admin + 11 especialistas)');
-        $this->command->info('🔑 Contraseña por defecto: password123 (admin: admin123)');
+        $this->command->info('🔑 Contraseña por defecto: password123 (admin: password)');
     }
 }

@@ -7,7 +7,7 @@
        x-init="if (!$store.sidebar) { Alpine.store('sidebar', { collapsed: false }) }"
        x-bind:class="{ 'w-20': collapsed, 'w-64': !collapsed }">
 
-    <!-- Logo / Brand -->
+    <!-- Logo / Nombre del sistema -->
     <div class="flex items-center justify-center h-24 bg-gray-800 border-b border-gray-700 py-4">
         <a href="{{ route('dashboard') }}" class="flex items-center space-x-3">
             <x-application-logo class="fill-current text-accent transition-all duration-300" x-bind:class="{ 'h-10 w-10': collapsed, 'h-14 w-14': !collapsed }" />
@@ -15,7 +15,7 @@
         </a>
     </div>
 
-    <!-- Toggle Button -->
+    <!-- Button para plagar o desplegar -->
     <button @click="toggleCollapse()"
             class="absolute top-6 -right-3 bg-accent text-gray-900 rounded-full p-1.5 shadow-lg hover:bg-accent/90 transition-all duration-200 z-50">
         <svg x-show="!collapsed" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -26,7 +26,7 @@
         </svg>
     </button>
 
-    <!-- Navigation Menu -->
+    <!-- Navigation Menu (Ajuste del padding)-->
     <nav class="mt-4" x-bind:class="{ 'px-2': collapsed, 'px-3': !collapsed }">
         <!-- Dashboard -->
         <a href="{{ route('dashboard') }}"

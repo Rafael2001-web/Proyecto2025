@@ -3,7 +3,7 @@
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-white leading-tight">
-            {{ __('Entidades') }}
+            {{ __('Lista de Entidades') }}
         </h2>
     </x-slot>
 

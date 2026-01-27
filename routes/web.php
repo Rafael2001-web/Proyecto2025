@@ -134,12 +134,12 @@ Route::middleware('auth')->group(function () {
         Route::resource('entidades', EntidadController::class)->except(['index', 'show']);
     });
 
-    // 🏗️ COORDINADOR DE UNIDADES - CRUD completo de unidades
+    // 🏗️  UNIDADES - CRUD completo de unidades
     Route::middleware('can.any:manage unidades, create unidades, edit unidades, delete unidades')->group(function () {
         Route::resource('unidades', UnidadController::class)->except(['index', 'show']);
     });
 
-    // 🎯 ESPECIALISTA EN ODS - CRUD completo de ODS
+    // 🎯 ODS - CRUD completo de ODS
     Route::middleware('can.any:manage ods, create ods, edit ods, delete ods')->group(function () {
         Route::resource('ods', OdsController::class)->except(['index', 'show']);
     });
@@ -149,7 +149,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('objEstrategicos', ObjEstrategicoController::class)->except(['index', 'show']);
     });
 
-    // 🇵🇪 ANALISTA DE PND - CRUD completo de PND
+    //  ANALISTA DE PND - CRUD completo de PND
     Route::middleware('can.any:manage pnd, create pnd, edit pnd, delete pnd')->group(function () {
         Route::resource('pnd', PndController::class)->except(['index', 'show']);
     });

@@ -18,9 +18,10 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/table.js'])
 
-        <!-- SheetJS Library for Excel Export -->
+        <!-- SheetJS Library para exportar tablas Excel -->
         <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
 </head>
+<!-- Controla si el sidebar está Expandido o Colapsado -->
 <body class="font-sans antialiased" x-data="{ get collapsed() { return $store.sidebar?.collapsed ?? false } }">
     <div class="min-h-screen bg-gray-100">
         {{-- Sidebar --}}
@@ -28,7 +29,7 @@
 
         {{-- Main Content Area --}}
         <div class="transition-all duration-300" x-bind:class="{ 'ml-20': collapsed, 'ml-64': !collapsed }">
-            {{-- Top Navigation --}}
+            {{-- Barra de navegación superior --}}
             @include('layouts.navigation')
 
             {{-- Page Heading --}}

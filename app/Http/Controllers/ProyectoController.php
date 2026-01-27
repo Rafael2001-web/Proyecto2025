@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\proyecto;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Gate;
 
 class ProyectoController extends Controller
@@ -105,5 +106,12 @@ class ProyectoController extends Controller
         $proyecto->delete();
         return redirect()->route('proyectos.index')
             ->with('success', 'Proyecto eliminado correctamente');
+    }
+
+    public function documentopdf(){
+        Gate::any(['generate report proyectos', 'generate reports']);
+        $proyectos = Proyecto::all();
+        $pdf =Pdf::loadView('proyectos.pdf', compact('proyectos'));
+        return $pdf->stream('reporte_proyecto.pdf');
     }
 }
