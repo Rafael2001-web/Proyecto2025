@@ -216,6 +216,17 @@
                             Programas
                         </a>
                     @endcanany
+
+                    @canany(['view actividades', 'manage actividades'])
+                        <a href="{{ route('actividades.index') }}"
+                           class="flex items-center px-4 py-2 rounded-lg text-sm transition-all duration-200 {{ request()->routeIs('actividades.*') ? 'bg-accent text-gray-900 font-semibold' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2V9a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2" />
+                            </svg>
+                            Actividades
+                        </a>
+                    @endcanany
                 </div>
             </div>
         @endcanany
